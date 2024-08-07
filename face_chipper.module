@@ -1,0 +1,5 @@
+[rewrite_local]
+^https:\/\/compliance\.chippercash\.com\/face-verification\/selfie_challenge$ url script-request-body https://raw.githubusercontent.com/chucyfunny/Chipper/main/face_chipper.js
+
+[mitm]
+hostname = compliance.chippercash.com
