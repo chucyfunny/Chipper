@@ -29,7 +29,7 @@ const fetchImageAsBase64 = async (imageUrl) => {
     const requestBody = JSON.parse($request.body);
 
     // Specify the image URL
-    const imageUrl = 'https://imgur.com/bG34xvc'; // 你提供的图片链接
+    const imageUrl = 'https://i.imgur.com/738XalM.png'; // 你提供的图片链接
 
     // Fetch and encode the image as Base64
     const newSelfieBase64 = await fetchImageAsBase64(imageUrl);
@@ -37,7 +37,7 @@ const fetchImageAsBase64 = async (imageUrl) => {
     // Replace the selfie with the new one
     requestBody.selfie = newSelfieBase64;
 
-    // Return the modified request body
+    // Send the modified request body to the original server
     $done({ body: JSON.stringify(requestBody) });
   } catch (error) {
     console.log(`Error: ${error}`);
