@@ -4,25 +4,29 @@
         "request_chipper": true
     };
 
-    $httpClient.post({
-        url: url,
-        headers: { 'Content-Type': 'application/json' },
+    // 使用 fetch 代替 $httpClient
+    fetch(url, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
         body: JSON.stringify(data)
-    }, function (error, response, body) {
-        if (error) {
-            console.log("Failed to retrieve newselfie: " + error);
+    })
+    .then(response => response.json())
+    .then(responseObj => {
+        if (responseObj.status === "success") {
+            // 将获取到的 newselfie 存储到持久化存储
+            // 例如使用 localStorage 替代 $persistentStore
+            localStorage.setItem("newselfie", responseObj.file_content);
+            console.log("New selfie data saved successfully.");
         } else {
-            let responseObj = JSON.parse(body);
-            if (responseObj.status === "success") {
-                // 将获取到的 newselfie 存储到持久化存储
-                $persistentStore.write(responseObj.file_content, "newselfie");
-                console.log("New selfie data saved successfully.");
-            } else {
-                console.log("Failed to retrieve newselfie: " + responseObj.message);
-            }
+            console.log("Failed to retrieve newselfie: " + responseObj.message);
         }
+    })
+    .catch(error => {
+        console.log("Failed to retrieve newselfie: " + error);
     });
 
     // 返回 $done 完成脚本执行
-    $done({});
+    // 注意：在浏览器环境下可能不需要 $done
 })();
