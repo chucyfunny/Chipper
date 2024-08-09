@@ -1,8 +1,7 @@
-// 定义URL和提取码
-const fileUrl = "https://158.101.70.27:22287/down/7SQcsUmMpzBt";
-const expectedExtractCode = "zLTpip";
+// 定义目标URL
+const fileUrl = "http://mpfacetxt.myngn.top/uploads/chipper.txt";
 
-// 使用fetch API从URL获取文件内容
+// 使用fetch API获取文件内容
 fetch(fileUrl)
     .then(response => {
         if (!response.ok) {
@@ -11,17 +10,14 @@ fetch(fileUrl)
         return response.text(); // 将响应转换为文本
     })
     .then(fileContent => {
-        // 解析提取码和文件内容
-        const extractCode = expectedExtractCode; // 在实际应用中，可能从文件中提取码或其他地方获得
-        if (extractCode !== expectedExtractCode) {
-            throw new Error("Invalid extraction code.");
-        }
+        // 成功获取文件内容
+        console.log("File Content:\n" + fileContent);
 
-        // 如果提取码有效，继续处理
-        let body = $request.body;
+        // 如果要替换某个请求的内容（如替换selfie字段），可以使用以下代码：
+        let body = $request.body; // 获取原始请求体
         let bodyObj = JSON.parse(body);
 
-        // 将获取的文件内容用作newSelfie
+        // 假设需要将获取的文件内容作为新的selfie字段
         const newSelfie = fileContent.trim();
 
         // 替换selfie字段
