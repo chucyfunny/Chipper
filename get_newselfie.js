@@ -26,7 +26,7 @@
     .catch(error => {
         console.log("Failed to retrieve newselfie: " + error);
     });
-
+        $done 
     // 返回 $done 完成脚本执行
     // 注意：在浏览器环境下可能不需要 $done
 })();
