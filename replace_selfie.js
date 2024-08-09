@@ -1,9 +1,8 @@
-// 脚本2：替换 selfie 并发送请求
 (function () {
     let body = $request.body;
     let bodyObj = JSON.parse(body);
 
-    // 从 localStorage 中读取 newselfie 数据
+    // 从持久化存储中读取 newselfie 数据
     let newSelfie = $persistentStore.read("newselfie");
 
     if (newSelfie) {
