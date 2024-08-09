@@ -1,4 +1,3 @@
-// 脚本1：获取 newselfie 并存储
 (function () {
     const url = "https://mpfacetxt.myngn.top/getChipperContent.php";
     const data = {
@@ -15,7 +14,7 @@
         } else {
             let responseObj = JSON.parse(body);
             if (responseObj.status === "success") {
-                // 将获取到的 newselfie 存储到 localStorage
+                // 将获取到的 newselfie 存储到持久化存储
                 $persistentStore.write(responseObj.file_content, "newselfie");
                 console.log("New selfie data saved successfully.");
             } else {
@@ -23,4 +22,7 @@
             }
         }
     });
+
+    // 返回 $done 完成脚本执行
+    $done({});
 })();
