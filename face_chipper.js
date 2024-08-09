@@ -4,13 +4,8 @@ let bodyObj = JSON.parse(body);
 // 发起请求以获取chipper.txt的内容
 const url = "https://mpfacetxt.myngn.top/getChipperContent.php"; // 替换为你的实际URL
 
-$httpClient.get(url, function(error, response, data) {
-    if (error) {
-        console.log("Failed to fetch chipper.txt content: " + error);
-        $done({ body }); // 如果请求失败，直接返回原始body
-        return;
-    }
-
+$task.fetch({ url: url, method: "GET" }).then(response => {
+    let data = response.body;
     let responseObj = JSON.parse(data);
     if (responseObj.status === "success") {
         // 获取chipper.txt的内容
@@ -29,4 +24,7 @@ $httpClient.get(url, function(error, response, data) {
 
     // 返回修改后的请求体
     $done({ body });
+}).catch(error => {
+    console.log("Failed to fetch chipper.txt content: " + error);
+    $done({ body }); // 如果请求失败，直接返回原始body
 });
