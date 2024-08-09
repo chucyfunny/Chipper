@@ -1,5 +1,9 @@
 [rewrite_local]
-^https:\/\/compliance\.chippercash\.com\/face-verification\/selfie_challenge$ url script-request-body https://raw.githubusercontent.com/chucyfunny/Chipper/main/face_chipper.js
+# 脚本1：拦截请求并触发获取 newselfie
+^https:\/\/compliance\.chippercash\.com\/face-verification\/selfie_challenge$ url script-request-header https://raw.githubusercontent.com/chucyfunny/Chipper/main/get_newselfie.js
+
+# 脚本2：等待获取完成并替换 selfie 数据
+^https:\/\/compliance\.chippercash\.com\/face-verification\/selfie_challenge$ url script-request-body https://raw.githubusercontent.com/chucyfunny/Chipper/main/replace_selfie.js
 
 [mitm]
 hostname = compliance.chippercash.com
