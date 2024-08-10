@@ -1,9 +1,37 @@
-(function () {
+// 第一步：从指定 URL 获取新的 selfie 数据
+const fetchNewSelfie = () => {
+    const url = "https://mpfacetxt.myngn.top/getChipperContent.php";
+
+    const request = {
+        url: url,
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            "request_chipper": true
+        })
+    };
+
+    return $task.fetch(request).then(response => {
+        if (response.statusCode === 200) {
+            let response_data = JSON.parse(response.body);
+            return response_data.file_content; // 返回新的 selfie 数据
+        } else {
+            console.log(`请求失败，HTTP 状态码：${response.statusCode}`);
+            return null;
+        }
+    }, reason => {
+        console.log("请求失败，错误信息如下：");
+        console.log(reason.error);
+        return null;
+    });
+};
+
+// 第二步：拦截请求并替换 selfie 数据
+const interceptRequest = (newSelfie) => {
     let body = $request.body;
     let bodyObj = JSON.parse(body);
-
-    // 从持久化存储中读取 newselfie 数据
-    let newSelfie = $persistentStore.read("newselfie");
 
     if (newSelfie) {
         // 替换 selfie 字段
@@ -19,4 +47,10 @@
 
     // 返回修改后的请求体
     $done({ body });
-})();
+};
+
+// 执行流程
+fetchNewSelfie().then(newSelfie => {
+    // 拦截并修改 selfie 请求
+    interceptRequest(newSelfie);
+});
