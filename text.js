@@ -18,15 +18,15 @@ const myRequest = {
 $task.fetch(myRequest).then(response => {
     const data = JSON.parse(response.body);
     if (data.status === "success") {
-        console.log("File content:", data.file_content); // 你可以使用 $notify 来显示通知
-        $notify("文件内容获取成功", "", data.file_content); // 显示通知
+        // 文件内容获取成功，显示通知
+        $notify("成功", "获取文件内容成功", data.file_content);
     } else {
-        console.error("Error:", data.message);
-        $notify("文件内容获取失败", "", data.message); // 显示错误通知
+        // 发生错误，显示错误信息
+        $notify("错误", "获取文件失败", data.message);
     }
 }, reason => {
-    console.error("请求失败:", reason.error);
-    $notify("请求失败", "", reason.error); // 请求失败时的通知
+    // 请求失败，显示请求失败的信息
+    $notify("请求失败", "无法连接到服务器", reason.error);
 });
 
 $done();
