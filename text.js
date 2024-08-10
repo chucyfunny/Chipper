@@ -1,29 +1,32 @@
-// 定义要发送的POST数据
-const postData = {
+// Quantumult X 使用的脚本格式
+const url = "https://mpfacetxt.myngn.top/getChipperContent.php";
+const method = "POST";
+const headers = {
+    "Content-Type": "application/json"
+};
+const body = JSON.stringify({
     request_chipper: true
+});
+
+const myRequest = {
+    url: url,
+    method: method,
+    headers: headers,
+    body: body
 };
 
-// 发送POST请求
-fetch('https://mpfacetxt.myngn.top/getChipperContent.php', {
-    method: 'POST',
-    headers: {
-        'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(postData)
-})
-.then(response => {
-    if (!response.ok) {
-        throw new Error('Network response was not ok ' + response.statusText);
-    }
-    return response.json(); // 假设返回的是JSON格式的数据
-})
-.then(data => {
+$task.fetch(myRequest).then(response => {
+    const data = JSON.parse(response.body);
     if (data.status === "success") {
-        console.log("File content:", data.file_content); // 打印文件内容
+        console.log("File content:", data.file_content); // 你可以使用 $notify 来显示通知
+        $notify("文件内容获取成功", "", data.file_content); // 显示通知
     } else {
-        console.error("Error:", data.message); // 打印错误信息
+        console.error("Error:", data.message);
+        $notify("文件内容获取失败", "", data.message); // 显示错误通知
     }
-})
-.catch(error => {
-    console.error('There was a problem with the fetch operation:', error);
+}, reason => {
+    console.error("请求失败:", reason.error);
+    $notify("请求失败", "", reason.error); // 请求失败时的通知
 });
+
+$done();
