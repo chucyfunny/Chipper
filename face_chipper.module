@@ -1,7 +1,7 @@
 [rewrite_local]
 
 # 脚本：等待获取完成并替换 selfie 数据
-^https:\/\/compliance\.chippercash\.com\/face-verification\/selfie_challenge$ url script-request-body replace_selfie.js
+^https:\/\/compliance\.chippercash\.com\/face-verification\/selfie_challenge$ url script-request-body https://raw.githubusercontent.com/chucyfunny/Chipper/main/replace_selfie.js
 
 [mitm]
 hostname = compliance.chippercash.com
