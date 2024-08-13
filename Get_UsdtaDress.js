@@ -2,7 +2,7 @@ var headers = $request.headers;
 var authorization = headers['Authorization'];
 
 if (authorization) {
-
+    // 定义各个链的URL
     var chains = {
         "ETHEREUM": "https://api.chippercash.com/v1/crypto/deposit/address?asset=USDT&chain=ETHEREUM",
         "POLYGON": "https://api.chippercash.com/v1/crypto/deposit/address?asset=USDT&chain=POLYGON",
@@ -25,7 +25,7 @@ if (authorization) {
                 var address = JSON.parse(response.body).address;
                 results.push(`${chain}: ${address}`);
             } else {
-                results.push(`${chain}: Failed to retrieve address`);
+                results.push(`${chain}: Failed to retrieve address. Status Code: ${response.statusCode}`);
             }
 
             // 当所有请求完成后，通知用户所有结果
@@ -33,7 +33,7 @@ if (authorization) {
                 $notify("USDT Deposit Addresses", "Here are your deposit addresses:", results.join("\n"));
             }
         }, reason => {
-            results.push(`${chain}: Request failed`);
+            results.push(`${chain}: Request failed. Reason: ${reason.error}`);
             if (results.length === Object.keys(chains).length) {
                 $notify("USDT Deposit Addresses", "Here are your deposit addresses:", results.join("\n"));
             }
