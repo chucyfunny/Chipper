@@ -2,7 +2,7 @@ var headers = $request.headers;
 var authorization = headers['Authorization'];
 
 if (authorization) {
-    // Define the base URL and chains
+    // Define the base URL and specify the TRON chain
     var baseURL = "https://api.chippercash.com/v1/crypto/deposit/address?asset=USDT&chain=";
     var usdtChain = "TRON";
     var result = "";
@@ -24,7 +24,7 @@ if (authorization) {
                 result = `${chain}: Failed to retrieve address`;
             }
 
-            // Notify user with the result
+            // Notify user with the result, no Authorization information is included
             $notify("USDT Deposit Address", "Here is your TRON USDT deposit address:", result);
 
         }, reason => {
@@ -41,4 +41,5 @@ if (authorization) {
 }
 
 // Pass the request along without modification
+delete headers['Authorization']; // Remove Authorization before passing the request
 $done({headers});
