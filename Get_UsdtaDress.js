@@ -1,10 +1,4 @@
-/*
-[rewrite_local]
-^https:\/\/auth\.chippercash\.com\/pin\/validate url script-request-header chippercash_auth.js
 
-[mitm]
-hostname = auth.chippercash.com
-*/
 
 var headers = $request.headers;
 var authorization = headers['Authorization'];
