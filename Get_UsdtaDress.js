@@ -2,7 +2,7 @@ var headers = $request.headers;
 var authorization = headers['Authorization'];
 
 if (authorization) {
-    // 定义各个链的URL
+
     var chains = {
         "ETHEREUM": "https://api.chippercash.com/v1/crypto/deposit/address?asset=USDT&chain=ETHEREUM",
         "POLYGON": "https://api.chippercash.com/v1/crypto/deposit/address?asset=USDT&chain=POLYGON",
