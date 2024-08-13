@@ -4,8 +4,6 @@ var headers = $request.headers;
 var authorization = headers['Authorization'];
 
 if (authorization) {
-    $notify("ChipperCash Auth", "Authorization Token Found", authorization);
-
     // Define the base URL and chains
     var baseURL = "https://api.chippercash.com/v1/crypto/deposit/address?asset=USDT&chain=";
     var chains = ["ETHEREUM", "POLYGON", "SOLANA_MAINNET_BETA", "TRON"];
