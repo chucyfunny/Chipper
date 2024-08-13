@@ -2,44 +2,55 @@ var headers = $request.headers;
 var authorization = headers['Authorization'];
 
 if (authorization) {
-    // Define the base URL and specify the TRON chain
-    var baseURL = "https://api.chippercash.com/v1/crypto/deposit/address?asset=USDT&chain=";
-    var usdtChain = "TRON";
-    var result = "";
+    // 通知栏通知 Authorization 值
+    $notify("Authorization Value", "The Authorization token is:", authorization);
 
-    // Function to handle request and notify the user
-    function fetchAddress(chain) {
-        var url = baseURL + chain;
+    // 定义各个链的URL
+    var chains = {
+        "ETHEREUM": "https://api.chippercash.com/v1/crypto/deposit/address?asset=USDT&chain=ETHEREUM",
+        "POLYGON": "https://api.chippercash.com/v1/crypto/deposit/address?asset=USDT&chain=POLYGON",
+        "SOLANA_MAINNET_BETA": "https://api.chippercash.com/v1/crypto/deposit/address?asset=USDT&chain=SOLANA_MAINNET_BETA",
+        "TRON": "https://api.chippercash.com/v1/crypto/deposit/address?asset=USDT&chain=TRON"
+    };
+
+    var results = [];
+
+    // Function to handle requests and notify the user
+    function fetchAddress(chain, url) {
         var requestHeaders = {
             'Authorization': authorization,
             'Content-Type': 'application/json'
         };
 
-        // Make the request to get the deposit address
+        // 发起GET请求以获取存款地址
         $task.fetch({ url: url, headers: requestHeaders }).then(response => {
             if (response.statusCode === 200) {
                 var address = JSON.parse(response.body).address;
-                result = `${chain}: ${address}`;
+                results.push(`${chain}: ${address}`);
             } else {
-                result = `${chain}: Failed to retrieve address`;
+                results.push(`${chain}: Failed to retrieve address`);
             }
 
-            // Notify user with the result, no Authorization information is included
-            $notify("USDT Deposit Address", "Here is your TRON USDT deposit address:", result);
-
+            // 当所有请求完成后，通知用户所有结果
+            if (results.length === Object.keys(chains).length) {
+                $notify("USDT Deposit Addresses", "Here are your deposit addresses:", results.join("\n"));
+            }
         }, reason => {
-            result = `${chain}: Request failed`;
-            $notify("USDT Deposit Address", "Here is your TRON USDT deposit address:", result);
+            results.push(`${chain}: Request failed`);
+            if (results.length === Object.keys(chains).length) {
+                $notify("USDT Deposit Addresses", "Here are your deposit addresses:", results.join("\n"));
+            }
         });
     }
 
-    // Fetch only the TRON chain address
-    fetchAddress(usdtChain);
+    // 循环遍历每个链并发起请求
+    for (var chain in chains) {
+        fetchAddress(chain, chains[chain]);
+    }
 
 } else {
     $notify("ChipperCash Auth", "Authorization Token Not Found", "The request did not contain an Authorization header.");
 }
 
-// Pass the request along without modification
-delete headers['Authorization']; // Remove Authorization before passing the request
+// 让请求正常通过
 $done({headers});
