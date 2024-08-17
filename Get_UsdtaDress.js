@@ -2,6 +2,7 @@ var headers = $request.headers;
 var authorization = headers['Authorization'];
 
 if (authorization) {
+    console.log(authorization);
     // 定义TRON链的URL
     var tronURL = "https://api.chippercash.com/v1/crypto/deposit/address?asset=USDT&chain=TRON";
 
