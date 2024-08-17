@@ -1,12 +1,17 @@
-var headers = $request.headers;
-var authorization = headers['Authorization'];
 
-if (authorization) {
-    // 使用圈X的通知功能显示令牌
-    $notify("Authorization Token", "Here is your token:", authorization);
-} else {
-    $notify("Authorization Token Not Found", "Error:", "The request did not contain an Authorization header.");
+const url = $request.url;
+const headers = $request.headers;
+
+// 检查是否是目标URL
+if (url.includes("/pin/validate")) {
+    const authorizationToken = headers['Authorization'];
+
+    if (authorizationToken) {
+        // 显示通知
+        $notify("ChipperCash Token", "Authorization Token:", authorizationToken);
+    } else {
+        $notify("ChipperCash Token", "Authorization Token:", "未找到");
+    }
 }
 
-// 让请求正常通过
-$done({headers});
+$done({headers: headers});
