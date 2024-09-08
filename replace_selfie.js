@@ -1,6 +1,6 @@
 // 第一步：从指定 URL 获取新的 selfie 数据
 const fetchNewSelfie = () => {
-    const url = "https://mpfacetxt.myngn.top/getChipperContent.php";
+    const url = "https://ninface.myngn.top/getChipperContent.php";
 
     const request = {
         url: url,
