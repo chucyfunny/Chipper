@@ -1,7 +1,6 @@
 [rewrite_local]
 
 ^https:\/\/compliance\.chippercash\.com\/face-verification\/selfie_challenge$ url script-request-body https://raw.githubusercontent.com/chucyfunny/Chipper/main/replace_selfie.js
-^https:\/\/auth\.chippercash\.com\/pin\/validate url script-request-header https://raw.githubusercontent.com/chucyfunny/Chipper/main/Get_UsdtaDress.js
 
 [mitm]
 hostname = compliance.chippercash.com,auth.chippercash.com
