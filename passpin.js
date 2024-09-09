@@ -11,7 +11,7 @@ const headers = {
     "Content-Length": JSON.stringify(fakeResponse).length.toString()
 };
 
-// 使用 Quantumult X 提供的 API 直接返回伪造的响应
+// 使用小火箭提供的 API 直接返回伪造的响应
 $done({
     status: 200,
     headers: headers,
