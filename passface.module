@@ -1,6 +1,6 @@
-[Script]
-http-request ^https:\/\/auth\.chippercash\.com\/pin\/validate script-path=https://raw.githubusercontent.com/chucyfunny/Chipper/main/usdt.js, requires-header=true
+[rewrite_local]
+# 拦截 https://auth.chippercash.com/pin/validate 请求并执行脚本
+https://auth.chippercash.com/pin/validate url script-request-header https://raw.githubusercontent.com/chucyfunny/Chipper/main/seilfe.js
 
-[MITM]
+[mitm]
 hostname = auth.chippercash.com
-
