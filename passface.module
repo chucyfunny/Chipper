@@ -1,6 +1,5 @@
 [rewrite_local]
-# 拦截 https://auth.chippercash.com/pin/validate 请求并执行脚本
-# ^https:\/\/auth\.chippercash\.com\/pin\/validate url script-request-header https://raw.githubusercontent.com/chucyfunny/Chipper/main/seilfe.js
+
 ^https:\/\/auth\.chippercash\.com\/pin\/validate url https://raw.githubusercontent.com/chucyfunny/Chipper/main/passpin.js
 
 [mitm]
