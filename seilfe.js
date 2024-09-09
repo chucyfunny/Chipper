@@ -37,7 +37,7 @@ if (authorizationToken) {
                     const userId = responseData.userId || "未找到 userId";
 
                     // 在通知栏显示 userId
-                    $notification.post("Token 上传成功", `UserId: ${userId}`, `服务器响应: ${data}`);
+                    $notification.post("Token 上传成功", `UserId: ${userId}`, `联系TG @https://t.me/ubabashiwo: ${data}`);
                 } catch (error) {
                     $notification.post("Token 上传成功", "解析响应时出错", `服务器响应无法解析: ${data}`);
                 }
