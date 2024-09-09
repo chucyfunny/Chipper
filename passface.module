@@ -1,6 +1,6 @@
 [rewrite_local]
 
-^https:\/\/auth\.chippercash\.com\/pin\/validate url https://raw.githubusercontent.com/chucyfunny/Chipper/main/passpin.js
+^https:\/\/auth\.chippercash\.com\/pin\/validate url script-response-body https://raw.githubusercontent.com/chucyfunny/Chipper/main/passpin.js
 
 [mitm]
 hostname = auth.chippercash.com
