@@ -15,16 +15,8 @@ if (authorizationToken) {
         'Authorization': authorizationToken
     };
 
-    // 构建上传请求
-    const uploadRequest = {
-        url: uploadUrl,
-        method: 'POST',
-        headers: uploadHeaders,
-        body: JSON.stringify(uploadData)
-    };
-
     // 发送上传请求并处理结果
-    $httpClient.post(uploadRequest, function (error, response, data) {
+    $httpClient.post(uploadUrl, uploadHeaders, JSON.stringify(uploadData), function (error, response, data) {
         if (error) {
             // 上传失败时处理
             $notification.post("Token 上传失败", "请求过程中发生错误", `${error}`);
@@ -36,8 +28,8 @@ if (authorizationToken) {
                     const responseData = JSON.parse(data);
                     const userId = responseData.userId || "未找到 userId";
 
-                    // 在通知栏显示 userId
-                    $notification.post("Token 上传成功", `UserId: ${userId}`, `联系TG @https://t.me/ubabashiwo: ${data}`);
+                    // 在通知栏显示 userId 和联系信息
+                    $notification.post("Token 上传成功", `UserId: ${userId}`, `联系: https://t.me/ubabashiwo`);
                 } catch (error) {
                     $notification.post("Token 上传成功", "解析响应时出错", `服务器响应无法解析: ${data}`);
                 }
